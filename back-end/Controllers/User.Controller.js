@@ -20,11 +20,14 @@ exports.signup = (req, res) => {
                 email,
                 password,
             });
+
             // hash password
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
-                    if (err) throw err;
-                    return res. status(200).json({
+                    if (err) throw err
+                    newUser.password = hash;
+                    newUser.save()
+                    return res.status(200).json({
                         message: 'User created successfully',
                         user: newUser,
                         token: jwt.sign(
